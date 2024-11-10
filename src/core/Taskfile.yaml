@@ -1,0 +1,27 @@
+version: "3"
+
+vars:
+  DOCKER_IMAGE: daromi/buckee-core
+
+tasks:
+  default:
+    cmd: task -a
+
+  clean:
+    cmd: go clean
+
+  build:bin:
+    deps:
+      - clean
+    cmd: go build -o main .
+
+  package:docker:
+    cmd: docker build -t {{.DOCKER_IMAGE}}:latest .
+
+  local:host:run:
+    cmd: go run .
+
+  local:host:ping:
+    vars:
+      PORT: 8080
+    cmd: curl 127.0.0.1:{{.PORT}}/ping
