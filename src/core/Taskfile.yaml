@@ -25,3 +25,10 @@ tasks:
     vars:
       PORT: 8080
     cmd: curl 127.0.0.1:{{.PORT}}/ping
+
+  local:kind:load-docker-image:
+    preconditions:
+      - kind get clusters | grep "kind"
+    deps:
+      - package:docker
+    cmd: kind load docker-image {{.DOCKER_IMAGE}}
