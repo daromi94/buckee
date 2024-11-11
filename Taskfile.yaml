@@ -46,7 +46,7 @@ tasks:
     preconditions:
       - kind get clusters | grep 'kind'
     status:
-      - kubectl get pods -n {{.CROSSPLANE_NAMESPACE}}
+      - kubectl get pods -n {{.CROSSPLANE_NAMESPACE}} | grep 'crossplane'
     deps:
       - local:kind:crossplane:add-repository
     cmd: helm install crossplane {{.CROSSPLANE_REPOSITORY_NAME}}/crossplane -n {{.CROSSPLANE_NAMESPACE}} --create-namespace
