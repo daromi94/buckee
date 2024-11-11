@@ -2,6 +2,12 @@ version: "3"
 
 vars:
   CORE_DIR: src/core
+  INFRA_DIR: src/infra
+
+  # Crossplane
+  CROSSPLANE_REPOSITORY_NAME: crossplane-stable
+  CROSSPLANE_REPOSITORY_URL: https://charts.crossplane.io/stable
+  CROSSPLANE_NAMESPACE: crossplane-system
 
 includes:
   core:
@@ -14,17 +20,53 @@ tasks:
 
   local:kind:create-cluster:
     status:
-      - kind get clusters | grep "kind"
+      - kind get clusters | grep 'kind'
     cmd: kind create cluster
 
   local:kind:delete-cluster:
     preconditions:
-      - kind get clusters | grep "kind"
+      - kind get clusters | grep 'kind'
     cmd: kind delete cluster
 
   local:kind:images:
     preconditions:
-      - kind get clusters | grep "kind"
+      - kind get clusters | grep 'kind'
     vars:
       NODE_NAME: kind-control-plane
     cmd: docker exec -it {{.NODE_NAME}} crictl images
+
+  local:kind:crossplane:add-repository:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    status:
+      - helm repo list | grep {{.CROSSPLANE_REPOSITORY_NAME}}
+    cmd: helm repo add {{.CROSSPLANE_REPOSITORY_NAME}} {{.CROSSPLANE_REPOSITORY_URL}}
+
+  local:kind:crossplane:install:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    status:
+      - kubectl get pods -n {{.CROSSPLANE_NAMESPACE}}
+    deps:
+      - local:kind:crossplane:add-repository
+    cmd: helm install crossplane {{.CROSSPLANE_REPOSITORY_NAME}}/crossplane -n {{.CROSSPLANE_NAMESPACE}} --create-namespace
+
+  local:kind:crossplane:providers:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get providers
+
+  local:kind:crossplane:crds:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get crds
+
+  local:kind:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl apply -k {{.INFRA_DIR}}
+
+  local:kind:unapply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl delete -k {{.INFRA_DIR}}
