@@ -2,6 +2,7 @@ version: "3"
 
 vars:
   DOCKER_IMAGE: daromi/buckee-core
+  DOCKER_TAG: latest
 
 tasks:
   default:
@@ -16,7 +17,8 @@ tasks:
     cmd: go build -o main .
 
   package:docker:
-    cmd: docker build -t {{.DOCKER_IMAGE}}:latest .
+    prompt: You are about to build a Docker image tagged as '{{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}'. Are you sure you want to proceed?
+    cmd: docker build -t {{.DOCKER_IMAGE}}:{{.DOCKER_TAG}} .
 
   local:host:run:
     cmd: go run .
@@ -28,7 +30,8 @@ tasks:
 
   local:kind:load-docker-image:
     preconditions:
-      - kind get clusters | grep "kind"
+      - kind get clusters | grep 'kind'
     deps:
       - package:docker
-    cmd: kind load docker-image {{.DOCKER_IMAGE}}
+    prompt: You are about to load the Docker image '{{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}' into the Kind cluster. Are you sure you want to proceed?"
+    cmd: kind load docker-image {{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}
