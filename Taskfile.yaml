@@ -49,7 +49,7 @@ tasks:
       - kubectl get pods -n {{.CROSSPLANE_NAMESPACE}} | grep 'crossplane'
     deps:
       - local:kind:crossplane:add-repository
-    cmd: helm install crossplane {{.CROSSPLANE_REPOSITORY_NAME}}/crossplane -n {{.CROSSPLANE_NAMESPACE}} --create-namespace
+    cmd: helm install crossplane {{.CROSSPLANE_REPOSITORY_NAME}}/crossplane -n {{.CROSSPLANE_NAMESPACE}} --create-namespace --wait
 
   local:kind:crossplane:providers:
     preconditions:
