@@ -1,12 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - aws/s3-provider.yaml
-  - aws/default-provider-config.yaml
+  - aws-s3-provider.yaml
+  - aws-default-provider-config.yaml
 secretGenerator:
   - name: aws-credentials
     namespace: crossplane-system
     files:
-      - credentials=aws/private-credentials
+      - credentials=private-credentials
 generatorOptions:
   disableNameSuffixHash: true

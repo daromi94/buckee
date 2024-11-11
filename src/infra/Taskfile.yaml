@@ -1,0 +1,71 @@
+version: "3"
+
+vars:
+  SETUP_DIR: setup
+
+  CROSSPLANE_REPOSITORY_NAME: crossplane-stable
+  CROSSPLANE_REPOSITORY_URL: https://charts.crossplane.io/stable
+  CROSSPLANE_NAMESPACE: crossplane-system
+
+tasks:
+  default:
+    cmd: task -a
+
+  local:kind:create-cluster:
+    status:
+      - kind get clusters | grep 'kind'
+    cmd: kind create cluster
+
+  local:kind:delete-cluster:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    prompt: You are about to delete the Kind cluster. This action cannot be undone. Are you sure you want to proceed?
+    cmd: kind delete cluster
+
+  local:kind:images:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    vars:
+      NODE_NAME: kind-control-plane
+    cmd: docker exec -it {{.NODE_NAME}} crictl images
+
+  local:kind:crossplane:add-repository:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    status:
+      - helm repo list | grep {{.CROSSPLANE_REPOSITORY_NAME}}
+    cmd: helm repo add {{.CROSSPLANE_REPOSITORY_NAME}} {{.CROSSPLANE_REPOSITORY_URL}}
+
+  local:kind:crossplane:install:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    status:
+      - kubectl get pods -n {{.CROSSPLANE_NAMESPACE}} | grep 'crossplane'
+    deps:
+      - local:kind:crossplane:add-repository
+    prompt: You are about to install Crossplane in the Kind cluster under the namespace '{{.CROSSPLANE_NAMESPACE}}'. Are you sure you want to proceed?
+    vars:
+      CHART_NAME: crossplane
+    cmd: helm install {{.CHART_NAME}} {{.CROSSPLANE_REPOSITORY_NAME}}/{{.CHART_NAME}} -n {{.CROSSPLANE_NAMESPACE}} --create-namespace --wait
+
+  local:kind:crossplane:crds:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get crds
+
+  local:kind:crossplane:providers:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get providers
+
+  local:kind:setup:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    prompt: You are about to apply the setup configuration to the Kind cluster. Are you sure you want to proceed?
+    cmd: kubectl apply -k {{.SETUP_DIR}}
+
+  local:kind:setup:delete:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    prompt: You are about to delete the setup configuration from the Kind cluster. This action cannot be undone. Are you sure you want to proceed?
+    cmd: kubectl delete -k {{.SETUP_DIR}}
