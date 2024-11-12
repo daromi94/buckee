@@ -1,7 +1,8 @@
 version: "3"
 
 vars:
-  SETUP_DIR: setup
+  PROVIDERS_DIR: providers
+  PROVIDER_CONFIGS_DIR: provider-configs
 
   CROSSPLANE_REPOSITORY_NAME: crossplane-stable
   CROSSPLANE_REPOSITORY_URL: https://charts.crossplane.io/stable
@@ -29,6 +30,11 @@ tasks:
       NODE_NAME: kind-control-plane
     cmd: docker exec -it {{.NODE_NAME}} crictl images
 
+  local:kind:crds:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get crds
+
   local:kind:crossplane:add-repository:
     preconditions:
       - kind get clusters | grep 'kind'
@@ -48,24 +54,32 @@ tasks:
       CHART_NAME: crossplane
     cmd: helm install {{.CHART_NAME}} {{.CROSSPLANE_REPOSITORY_NAME}}/{{.CHART_NAME}} -n {{.CROSSPLANE_NAMESPACE}} --create-namespace --wait
 
-  local:kind:crossplane:crds:
-    preconditions:
-      - kind get clusters | grep 'kind'
-    cmd: kubectl get crds
-
   local:kind:crossplane:providers:
     preconditions:
       - kind get clusters | grep 'kind'
     cmd: kubectl get providers
 
-  local:kind:setup:apply:
+  local:kind:crossplane:providers:apply:
     preconditions:
       - kind get clusters | grep 'kind'
-    prompt: You are about to apply the setup configuration to the Kind cluster. Are you sure you want to proceed?
-    cmd: kubectl apply -k {{.SETUP_DIR}}
+    cmd: kubectl apply -k {{.PROVIDERS_DIR}}
 
-  local:kind:setup:delete:
+  local:kind:crossplane:providers:delete:
     preconditions:
       - kind get clusters | grep 'kind'
-    prompt: You are about to delete the setup configuration from the Kind cluster. This action cannot be undone. Are you sure you want to proceed?
-    cmd: kubectl delete -k {{.SETUP_DIR}}
+    cmd: kubectl delete -k {{.PROVIDERS_DIR}}
+
+  local:kind:crossplane:provider-configs:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get providerconfigs
+
+  local:kind:crossplane:provider-configs:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl apply -k {{.PROVIDER_CONFIGS_DIR}}
+
+  local:kind:crossplane:provider-configs:delete:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl delete -k {{.PROVIDER_CONFIGS_DIR}}
