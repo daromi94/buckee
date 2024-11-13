@@ -1,9 +1,10 @@
 apiVersion: ecr.aws.upbound.io/v1beta1
 kind: Repository
 metadata:
-  name: buckee
+  name: buckee-control-plane
 spec:
   forProvider:
+    forceDelete: true
     imageTagMutability: IMMUTABLE
     region: us-east-1
   providerConfigRef:
