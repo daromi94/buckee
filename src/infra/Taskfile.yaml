@@ -99,3 +99,6 @@ tasks:
     preconditions:
       - kind get clusters | grep 'kind'
     cmd: kubectl delete -k {{.REPOSITORIES_DIR}}
+
+  aws:ecr:authenticate-docker-client:
+    cmd: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com

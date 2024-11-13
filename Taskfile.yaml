@@ -4,6 +4,9 @@ vars:
   CONTROL_PLANE_DIR: src/control-plane
   INFRA_DIR: src/infra
 
+dotenv:
+  - "{{.INFRA_DIR}}/.env"
+
 includes:
   core:
     taskfile: "{{.CONTROL_PLANE_DIR}}/Taskfile.yaml"
