@@ -3,6 +3,7 @@ version: "3"
 vars:
   PROVIDERS_DIR: providers
   PROVIDER_CONFIGS_DIR: provider-configs
+  REPOSITORIES_DIR: repositories
 
   CROSSPLANE_REPOSITORY_NAME: crossplane-stable
   CROSSPLANE_REPOSITORY_URL: https://charts.crossplane.io/stable
@@ -83,3 +84,18 @@ tasks:
     preconditions:
       - kind get clusters | grep 'kind'
     cmd: kubectl delete -k {{.PROVIDER_CONFIGS_DIR}}
+
+  aws:kind:crossplane:repositories:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get repositories
+
+  aws:kind:crossplane:repositories:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl apply -k {{.REPOSITORIES_DIR}}
+
+  aws:kind:crossplane:repositories:delete:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl delete -k {{.REPOSITORIES_DIR}}
