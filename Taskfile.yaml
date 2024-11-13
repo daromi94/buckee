@@ -1,13 +1,13 @@
 version: "3"
 
 vars:
-  CORE_DIR: src/core
+  CONTROL_PLANE_DIR: src/control-plane
   INFRA_DIR: src/infra
 
 includes:
   core:
-    taskfile: "{{.CORE_DIR}}/Taskfile.yaml"
-    dir: "{{.CORE_DIR}}"
+    taskfile: "{{.CONTROL_PLANE_DIR}}/Taskfile.yaml"
+    dir: "{{.CONTROL_PLANE_DIR}}"
   infra:
     taskfile: "{{.INFRA_DIR}}/Taskfile.yaml"
     dir: "{{.INFRA_DIR}}"

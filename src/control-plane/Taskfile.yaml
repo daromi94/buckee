@@ -1,7 +1,7 @@
 version: "3"
 
 vars:
-  DOCKER_IMAGE: daromi/buckee-core
+  DOCKER_IMAGE: daromi/buckee-control-plane
   DOCKER_TAG: latest
 
 tasks:
