@@ -17,6 +17,8 @@ includes:
   infra:
     taskfile: "{{.INFRA_DIR}}/Taskfile.yaml"
     dir: "{{.INFRA_DIR}}"
+    vars:
+      AWS_ECR_REGISTRY: "{{.AWS_ECR_REGISTRY}}"
 
 tasks:
   default:
