@@ -132,5 +132,21 @@ tasks:
       - kind get clusters | grep 'kind'
     cmd: kubectl delete -k {{.SUBNETS_DIR}}
 
+  aws:kind:crossplane:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmds:
+      - task: aws:kind:crossplane:repositories:apply
+      - task: aws:kind:crossplane:vpcs:apply
+      - task: aws:kind:crossplane:subnets:apply
+
+  aws:kind:crossplane:delete:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmds:
+      - task: aws:kind:crossplane:subnets:delete
+      - task: aws:kind:crossplane:vpcs:delete
+      - task: aws:kind:crossplane:repositories:delete
+
   aws:ecr:authenticate-docker-client:
     cmd: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin {{.AWS_ECR_REGISTRY}}
