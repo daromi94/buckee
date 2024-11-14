@@ -4,8 +4,8 @@ metadata:
   name: buckee-control-plane
 spec:
   forProvider:
+    region: us-east-1
     forceDelete: true
     imageTagMutability: IMMUTABLE
-    region: us-east-1
   providerConfigRef:
     name: aws-default

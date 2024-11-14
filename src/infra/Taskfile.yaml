@@ -4,6 +4,7 @@ vars:
   PROVIDERS_DIR: providers
   PROVIDER_CONFIGS_DIR: provider-configs
   REPOSITORIES_DIR: repositories
+  VPCS_DIR: vpcs
 
   CROSSPLANE_REPOSITORY_NAME: crossplane-stable
   CROSSPLANE_REPOSITORY_URL: https://charts.crossplane.io/stable
@@ -99,6 +100,21 @@ tasks:
     preconditions:
       - kind get clusters | grep 'kind'
     cmd: kubectl delete -k {{.REPOSITORIES_DIR}}
+
+  aws:kind:crossplane:vpcs:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get vpcs
+
+  aws:kind:crossplane:vpcs:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl apply -k {{.VPCS_DIR}}
+
+  aws:kind:crossplane:vpcs:delete:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl delete -k {{.VPCS_DIR}}
 
   aws:ecr:authenticate-docker-client:
     cmd: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin {{.AWS_ECR_REGISTRY}}
