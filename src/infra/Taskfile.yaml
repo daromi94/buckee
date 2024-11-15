@@ -182,7 +182,7 @@ tasks:
       - task: aws:kind:crossplane:repositories:delete
       - task: aws:kind:crossplane:subnets:delete
       - task: aws:kind:crossplane:vpcs:delete
-      - task: aws:kind:crossplane:roles:apply
+      - task: aws:kind:crossplane:roles:delete
 
   aws:ecr:authenticate-docker-client:
     cmd: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin {{.AWS_ECR_REGISTRY}}
