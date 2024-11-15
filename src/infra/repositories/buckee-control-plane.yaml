@@ -5,7 +5,7 @@ metadata:
 spec:
   forProvider:
     region: us-east-1
-    forceDelete: true
     imageTagMutability: IMMUTABLE
+    forceDelete: true
   providerConfigRef:
-    name: aws-default
+    name: default

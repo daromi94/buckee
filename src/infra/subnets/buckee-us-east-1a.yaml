@@ -11,4 +11,4 @@ spec:
       matchLabels:
         vpc-name: buckee
   providerConfigRef:
-    name: aws-default
+    name: default
