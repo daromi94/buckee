@@ -3,6 +3,7 @@ version: "3"
 vars:
   PROVIDERS_DIR: providers
   PROVIDER_CONFIGS_DIR: provider-configs
+  ROLES_DIR: roles
   VPCS_DIR: vpcs
   SUBNETS_DIR: subnets
   REPOSITORIES_DIR: repositories
@@ -87,6 +88,21 @@ tasks:
       - kind get clusters | grep 'kind'
     cmd: kubectl delete -k {{.PROVIDER_CONFIGS_DIR}}
 
+  aws:kind:crossplane:roles:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get roles
+
+  aws:kind:crossplane:roles:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl apply -k {{.ROLES_DIR}}
+
+  aws:kind:crossplane:roles:delete:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl delete -k {{.ROLES_DIR}}
+
   aws:kind:crossplane:vpcs:
     preconditions:
       - kind get clusters | grep 'kind'
@@ -136,6 +152,7 @@ tasks:
     preconditions:
       - kind get clusters | grep 'kind'
     cmds:
+      - task: aws:kind:crossplane:roles:apply
       - task: aws:kind:crossplane:vpcs:apply
       - task: aws:kind:crossplane:subnets:apply
       - task: aws:kind:crossplane:repositories:apply
@@ -147,6 +164,7 @@ tasks:
       - task: aws:kind:crossplane:repositories:delete
       - task: aws:kind:crossplane:subnets:delete
       - task: aws:kind:crossplane:vpcs:delete
+      - task: aws:kind:crossplane:roles:apply
 
   aws:ecr:authenticate-docker-client:
     cmd: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin {{.AWS_ECR_REGISTRY}}
