@@ -1,0 +1,14 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: buckee-us-east-1b
+spec:
+  forProvider:
+    region: us-east-1
+    availabilityZone: us-east-1b
+    cidrBlock: 172.16.16.0/20
+    vpcIdSelector:
+      matchLabels:
+        vpc-name: buckee
+  providerConfigRef:
+    name: default

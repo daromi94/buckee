@@ -7,6 +7,7 @@ vars:
   VPCS_DIR: vpcs
   SUBNETS_DIR: subnets
   REPOSITORIES_DIR: repositories
+  CLUSTERS_DIR: clusters
 
   CROSSPLANE_REPOSITORY_NAME: crossplane-stable
   CROSSPLANE_REPOSITORY_URL: https://charts.crossplane.io/stable
@@ -148,6 +149,21 @@ tasks:
       - kind get clusters | grep 'kind'
     cmd: kubectl delete -k {{.REPOSITORIES_DIR}}
 
+  aws:kind:crossplane:clusters:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl get clusters
+
+  aws:kind:crossplane:clusters:apply:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl apply -k {{.CLUSTERS_DIR}}
+
+  aws:kind:crossplane:clusters:delete:
+    preconditions:
+      - kind get clusters | grep 'kind'
+    cmd: kubectl delete -k {{.CLUSTERS_DIR}}
+
   aws:kind:crossplane:apply:
     preconditions:
       - kind get clusters | grep 'kind'
@@ -156,11 +172,13 @@ tasks:
       - task: aws:kind:crossplane:vpcs:apply
       - task: aws:kind:crossplane:subnets:apply
       - task: aws:kind:crossplane:repositories:apply
+      - task: aws:kind:crossplane:clusters:apply
 
   aws:kind:crossplane:delete:
     preconditions:
       - kind get clusters | grep 'kind'
     cmds:
+      - task: aws:kind:crossplane:clusters:delete
       - task: aws:kind:crossplane:repositories:delete
       - task: aws:kind:crossplane:subnets:delete
       - task: aws:kind:crossplane:vpcs:delete
