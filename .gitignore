@@ -2,14 +2,35 @@
 *.env
 private-*
 
-# Build
+# Go
+
+## Binary
 main
 
-# IntelliJ IDEA
+# Terraform
+
+## Local state
+*.tfstate
+*.tfstate.*
+
+## Variables
+terraform.tfvars
+
+## Locks for provider versions
+.terraform.lock.hcl
+
+## Working directory
+.terraform
+
+# Editors
+
+## IntelliJ IDEA
 .idea
 
-# Visual Studio Code
+## Visual Studio Code
 .vscode
 
-# macOS
+# OS
+
+## macOS
 .DS_Store
