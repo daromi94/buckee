@@ -5,5 +5,5 @@ output "vpc_id" {
 
 output "private_subnet_ids" {
   value       = module.network.private_subnet_ids
-  description = "The ID of the private subnets for dev environment"
+  description = "The IDs of the private subnets for dev environment"
 }
