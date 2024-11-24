@@ -1,24 +1,12 @@
 version: "3"
 
-dotenv:
-  - ".env"
-
 vars:
   CONTROL_PLANE_DIR: src/control-plane
-  INFRA_DIR: src/infra
-  AWS_ECR_REGISTRY: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
 includes:
   control-plane:
     taskfile: "{{.CONTROL_PLANE_DIR}}/Taskfile.yaml"
     dir: "{{.CONTROL_PLANE_DIR}}"
-    vars:
-      AWS_ECR_REGISTRY: "{{.AWS_ECR_REGISTRY}}"
-  infra:
-    taskfile: "{{.INFRA_DIR}}/Taskfile.yaml"
-    dir: "{{.INFRA_DIR}}"
-    vars:
-      AWS_ECR_REGISTRY: "{{.AWS_ECR_REGISTRY}}"
 
 tasks:
   default:

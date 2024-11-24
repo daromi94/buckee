@@ -35,13 +35,3 @@ tasks:
       - package:docker
     prompt: You are about to load the Docker image '{{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}' into the Kind cluster. Are you sure you want to proceed?"
     cmd: kind load docker-image {{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}
-
-  aws:ecr:tag-docker-image:
-    deps:
-      - package:docker
-    cmd: docker tag {{.DOCKER_IMAGE}} {{.AWS_ECR_REGISTRY}}/{{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}
-
-  aws:ecr:push-docker-image:
-    deps:
-      - aws:ecr:tag-docker-image
-    cmd: docker push {{.AWS_ECR_REGISTRY}}/{{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}
