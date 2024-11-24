@@ -2,6 +2,6 @@ output "vpc_id" {
   value = module.network.vpc_id
 }
 
-output "cluster_arn" {
+output "k8s_cluster_arn" {
   value = module.k8s.cluster_arn
 }
