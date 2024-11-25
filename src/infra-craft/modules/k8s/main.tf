@@ -14,6 +14,11 @@ resource "aws_iam_role" "cluster" {
   assume_role_policy = data.aws_iam_policy_document.cluster_trust_policy.json
 }
 
+resource "aws_iam_role_policy_attachment" "cluster" {
+  role       = aws_iam_role.cluster.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+}
+
 data "aws_iam_policy_document" "cluster_trust_policy" {
   statement {
     effect = "Allow"
@@ -23,9 +28,4 @@ data "aws_iam_policy_document" "cluster_trust_policy" {
     }
     actions = ["sts:AssumeRole"]
   }
-}
-
-resource "aws_iam_role_policy_attachment" "cluster" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.cluster.name
 }
