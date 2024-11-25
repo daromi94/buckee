@@ -13,6 +13,6 @@ module "k8s" {
   source = "../../modules/k8s"
 
   cluster_name      = "buckee"
-  cluster_role_name = "eks-cluster"
   subnet_ids        = module.network.private_subnet_ids
+  cluster_role_name = "eks-cluster"
 }
