@@ -7,6 +7,9 @@ tasks:
   default:
     cmd: task -a
 
+  dev:init:
+    cmd: terraform -chdir={{.DEV_DIR}} init
+
   dev:plan:
     cmd: terraform -chdir={{.DEV_DIR}} plan
 
