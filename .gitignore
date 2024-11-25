@@ -9,18 +9,15 @@ main
 
 # Terraform
 
+## Working directory
+.terraform
+
+## Dependency lock file
+.terraform.lock.hcl
+
 ## Local state
 *.tfstate
 *.tfstate.*
-
-## Variables
-terraform.tfvars
-
-## Locks for provider versions
-.terraform.lock.hcl
-
-## Working directory
-.terraform
 
 # Editors
 
