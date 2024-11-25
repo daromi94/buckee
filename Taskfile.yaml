@@ -2,11 +2,15 @@ version: "3"
 
 vars:
   CONTROL_PLANE_DIR: src/control-plane
+  INFRA_CRAFT_DIR: src/infra-craft
 
 includes:
   control-plane:
     taskfile: "{{.CONTROL_PLANE_DIR}}/Taskfile.yaml"
     dir: "{{.CONTROL_PLANE_DIR}}"
+  infra-craft:
+    taskfile: "{{.INFRA_CRAFT_DIR}}/Taskfile.yaml"
+    dir: "{{.INFRA_CRAFT_DIR}}"
 
 tasks:
   default:

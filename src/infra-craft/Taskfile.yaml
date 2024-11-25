@@ -1,0 +1,17 @@
+version: "3"
+
+vars:
+  DEV_DIR: environments/dev
+
+tasks:
+  default:
+    cmd: task -a
+
+  dev:plan:
+    cmd: terraform -chdir={{.DEV_DIR}} plan
+
+  dev:apply:
+    cmd: terraform -chdir={{.DEV_DIR}} apply
+
+  dev:destroy:
+    cmd: terraform -chdir={{.DEV_DIR}} destroy
