@@ -1,3 +1,8 @@
+locals {
+  project     = "buckee"
+  environment = "dev"
+}
+
 provider "aws" {
   region = var.region
 }
@@ -12,7 +17,8 @@ module "network" {
 module "k8s" {
   source = "../../modules/k8s"
 
-  cluster_name      = "buckee"
-  subnet_ids        = module.network.private_subnet_ids
-  cluster_role_name = "eks-cluster"
+  cluster_name         = "${local.project}-${local.environment}"
+  subnet_ids           = module.network.private_subnet_ids
+  cluster_role_name    = "${local.project}-${local.environment}-cluster-role"
+  node_group_role_name = "${local.project}-${local.environment}-node-group-role"
 }
