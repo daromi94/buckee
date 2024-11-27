@@ -10,6 +10,7 @@ resource "aws_eks_cluster" "this" {
   depends_on = [aws_iam_role_policy_attachment.cluster]
 }
 
+# Cluster Role
 resource "aws_iam_role" "cluster" {
   name               = var.cluster_role_name
   assume_role_policy = data.aws_iam_policy_document.cluster_trust_policy.json
@@ -54,6 +55,7 @@ resource "aws_eks_node_group" "this" {
   ]
 }
 
+# Node Group Role
 resource "aws_iam_role" "node_group" {
   name               = var.node_group_role_name
   assume_role_policy = data.aws_iam_policy_document.node_group_trust_policy.json
