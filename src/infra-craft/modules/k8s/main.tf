@@ -1,5 +1,5 @@
 # Cluster
-resource "aws_eks_cluster" "main" {
+resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
   role_arn = aws_iam_role.cluster.arn
 
@@ -32,8 +32,8 @@ data "aws_iam_policy_document" "cluster_trust_policy" {
 }
 
 # Node Group
-resource "aws_eks_node_group" "main" {
-  cluster_name  = aws_eks_cluster.main.name
+resource "aws_eks_node_group" "this" {
+  cluster_name  = aws_eks_cluster.this.name
   node_role_arn = aws_iam_role.node_group.arn
   subnet_ids    = var.subnet_ids
 
