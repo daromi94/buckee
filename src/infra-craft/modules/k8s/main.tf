@@ -16,11 +16,6 @@ resource "aws_iam_role" "cluster" {
   assume_role_policy = data.aws_iam_policy_document.cluster_trust_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "cluster" {
-  role       = aws_iam_role.cluster.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-}
-
 data "aws_iam_policy_document" "cluster_trust_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -29,6 +24,11 @@ data "aws_iam_policy_document" "cluster_trust_policy" {
       identifiers = ["eks.amazonaws.com"]
     }
   }
+}
+
+resource "aws_iam_role_policy_attachment" "cluster" {
+  role       = aws_iam_role.cluster.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
 # Node Group
@@ -60,6 +60,16 @@ resource "aws_iam_role" "node_group" {
   assume_role_policy = data.aws_iam_policy_document.node_group_trust_policy.json
 }
 
+data "aws_iam_policy_document" "node_group_trust_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
 resource "aws_iam_role_policy_attachment" "worker_node" {
   role       = aws_iam_role.node_group.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
@@ -73,14 +83,4 @@ resource "aws_iam_role_policy_attachment" "cni" {
 resource "aws_iam_role_policy_attachment" "ecr" {
   role       = aws_iam_role.node_group.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-}
-
-data "aws_iam_policy_document" "node_group_trust_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-  }
 }
