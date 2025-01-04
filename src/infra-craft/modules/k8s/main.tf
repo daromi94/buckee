@@ -23,12 +23,11 @@ resource "aws_iam_role_policy_attachment" "cluster" {
 
 data "aws_iam_policy_document" "cluster_trust_policy" {
   statement {
-    effect = "Allow"
+    actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = ["eks.amazonaws.com"]
     }
-    actions = ["sts:AssumeRole"]
   }
 }
 
@@ -78,11 +77,10 @@ resource "aws_iam_role_policy_attachment" "ecr" {
 
 data "aws_iam_policy_document" "node_group_trust_policy" {
   statement {
-    effect = "Allow"
+    actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
-    actions = ["sts:AssumeRole"]
   }
 }
