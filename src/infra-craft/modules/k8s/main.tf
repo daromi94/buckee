@@ -18,11 +18,11 @@ resource "aws_iam_role" "cluster" {
 
 data "aws_iam_policy_document" "cluster_trust_policy" {
   statement {
-    actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = ["eks.amazonaws.com"]
     }
+    actions = ["sts:AssumeRole"]
   }
 }
 
@@ -62,11 +62,11 @@ resource "aws_iam_role" "node_group" {
 
 data "aws_iam_policy_document" "node_group_trust_policy" {
   statement {
-    actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
+    actions = ["sts:AssumeRole"]
   }
 }
 
