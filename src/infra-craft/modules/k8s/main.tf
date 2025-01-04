@@ -13,10 +13,10 @@ resource "aws_eks_cluster" "this" {
 # Cluster Role
 resource "aws_iam_role" "cluster" {
   name               = var.cluster_role_name
-  assume_role_policy = data.aws_iam_policy_document.cluster_trust_policy.json
+  assume_role_policy = data.aws_iam_policy_document.eks_trust_policy.json
 }
 
-data "aws_iam_policy_document" "cluster_trust_policy" {
+data "aws_iam_policy_document" "eks_trust_policy" {
   statement {
     principals {
       type        = "Service"
@@ -57,10 +57,10 @@ resource "aws_eks_node_group" "this" {
 # Node Group Role
 resource "aws_iam_role" "node_group" {
   name               = var.node_group_role_name
-  assume_role_policy = data.aws_iam_policy_document.node_group_trust_policy.json
+  assume_role_policy = data.aws_iam_policy_document.ec2_trust_policy.json
 }
 
-data "aws_iam_policy_document" "node_group_trust_policy" {
+data "aws_iam_policy_document" "ec2_trust_policy" {
   statement {
     principals {
       type        = "Service"
