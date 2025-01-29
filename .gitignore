@@ -1,33 +1,15 @@
-# Private
-*.env
-private-*
-
 # Go
-
-## Binary
 main
 
 # Terraform
-
-## Working directory
 .terraform
-
-## Dependency lock file
 .terraform.lock.hcl
-
-## Local state
 *.tfstate
 *.tfstate.*
 
 # Editors
-
-## IntelliJ IDEA
 .idea
-
-## Visual Studio Code
 .vscode
 
 # OS
-
-## macOS
 .DS_Store
